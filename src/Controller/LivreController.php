@@ -17,7 +17,7 @@ class LivreController extends AbstractController
     public function index(LivreRepository $livreRepository): Response
     {
         return $this->render('livre/index.html.twig', [
-            'livres' => $livreRepository->findAllNotDeleted(),
+            'livres' => $livreRepository->findBy(["deleted" => FALSE]),
         ]);
     }
 
@@ -29,7 +29,7 @@ class LivreController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $livre->setDeleted(FALSE);
+            $livreRepository->setDeleted(FALSE);
             $livreRepository->save($livre, true);
 
             return $this->redirectToRoute('app_livre_index', [], Response::HTTP_SEE_OTHER);

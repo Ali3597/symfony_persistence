@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Livre;
+use App\Entity\Search;
 use App\Form\LivreType;
 use App\Repository\LivreRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -10,24 +11,39 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
+use App\Form\SearchType;
+
+
 
 class LivreController extends AbstractController
 {
     #[Route('/', name: 'app_livre_index', methods: ['GET'])]
-    public function index(LivreRepository $livreRepository): Response
+    public function index(Request $request,LivreRepository $livreRepository): Response
     {
+        $search = new Search();
+        $form = $this->createForm(SearchType::class, $search);
+        $form->handleRequest($request);
+      
         return $this->render('livre/index.html.twig', [
-            'livres' => $livreRepository->findBy(["deleted" => FALSE]),
+            'livres' => $livreRepository->findLivresDependsOnSearch($search->getQueryName()),
+            "form" => $form->createView(),
         ]);
     }
 
-    #[Route('/withDeleted', name: 'app_livre_index', methods: ['GET'])]
-    public function withDeleted(LivreRepository $livreRepository): Response
+    #[Route('/withDeleted', name: 'app_livre_deleted', methods: ['GET'])]
+    public function withDeleted(Request $request,LivreRepository $livreRepository): Response
     {
+        $search = new Search();
+        $form = $this->createForm(SearchType::class, $search);
+        $form->handleRequest($request);
         return $this->render('livre/index.html.twig', [
-            'livres' => $livreRepository->findAll(),
+            'livres' => $livreRepository->findLivresDependsOnSearchDeleted($search->getQueryName()),
+            "form" => $form->createView(),
         ]);
     }
+   
+   
+ 
 
     #[Route('/livre/new', name: 'app_livre_new', methods: ['GET', 'POST'])]
     public function new(Request $request, LivreRepository $livreRepository): Response
@@ -37,7 +53,7 @@ class LivreController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $livreRepository->setDeleted(FALSE);
+            $livre->setDeleted(FALSE);
             $livreRepository->save($livre, true);
 
             return $this->redirectToRoute('app_livre_index', [], Response::HTTP_SEE_OTHER);

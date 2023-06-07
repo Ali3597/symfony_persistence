@@ -4,6 +4,11 @@
 
 {% block body %}
     <h1>Livre index</h1>
+    <div style='display:flex'>
+    {{ form(form) }}
+    <button type="submit"> Rechercher</button>
+    {{ form_end(form) }}
+    </div>
 
     <table class="table">
         <thead>
@@ -24,7 +29,9 @@
                 <td>{{ livre.nombreDePages }}</td>
                 <td>
                     <a href="{{ path('app_livre_show', {'id': livre.id}) }}">show</a>
-                    <a href="{{ path('app_livre_edit', {'id': livre.id}) }}">edit</a>
+                    {% if not livre.isDeleted %}
+                        <a href="{{ path('app_livre_edit', {'id': livre.id}) }}">edit</a>
+                    {% endif %}
                 </td>
             </tr>
         {% else %}

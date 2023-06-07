@@ -139,6 +139,8 @@ class Livre
         return $this;
     }
 
+
+
     public function removeEmprunt(Emprunt $emprunt): self
     {
         if ($this->emprunts->removeElement($emprunt)) {
@@ -166,5 +168,10 @@ class Livre
         $this->deleted = $deleted;
 
         return $this;
+    }
+
+    public function countEmprunts(): int
+    {
+        return count($this->emprunts);
     }
 }

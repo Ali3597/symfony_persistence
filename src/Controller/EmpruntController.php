@@ -21,7 +21,7 @@ class EmpruntController extends AbstractController
         ]);
     }
 
-    #[Route('/all-emprunte', name: 'app_emprunt_all-emprunte', methods: ['GET'])]
+    #[Route(' ', name: 'app_emprunt_all-emprunte', methods: ['GET'])]
     public function allEmprunte(EmpruntRepository $empruntRepository): Response
     {
         return $this->render('emprunt/index.html.twig', [

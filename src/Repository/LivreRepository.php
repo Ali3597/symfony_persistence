@@ -39,7 +39,31 @@ class LivreRepository extends ServiceEntityRepository
         }
     }
 
+    public function findLivresDependsOnSearch($search)
+    {
+        $query = $this->createQueryBuilder('l')
+            ->leftJoin('l.auhtor', 'a') // The missing join
+            ->Where('l.deleted = false')
+            ->andWhere('a.nom LIKE :search')
+            ->setParameter('search', '%' . $search . '%');
+        return   $query->getQuery()
+            ->getResult();
+    }
 
+    public function findLivresDependsOnSearchDeleted($search)
+    {
+        $query = $this->createQueryBuilder('l')
+            ->leftJoin('l.auhtor', 'a') // The missing join
+            ->Where('l.deleted = true')
+            ->andWhere('a.nom LIKE :search')
+            ->setParameter('search', '%' . $search . '%');
+        return   $query->getQuery()
+            ->getResult();
+    }
+
+
+
+    
 
 
 //    /**

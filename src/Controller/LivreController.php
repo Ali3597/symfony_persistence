@@ -21,6 +21,14 @@ class LivreController extends AbstractController
         ]);
     }
 
+    #[Route('/withDeleted', name: 'app_livre_index', methods: ['GET'])]
+    public function withDeleted(LivreRepository $livreRepository): Response
+    {
+        return $this->render('livre/index.html.twig', [
+            'livres' => $livreRepository->findAll(),
+        ]);
+    }
+
     #[Route('/livre/new', name: 'app_livre_new', methods: ['GET', 'POST'])]
     public function new(Request $request, LivreRepository $livreRepository): Response
     {

@@ -27,8 +27,9 @@ class Emprunt
     #[ORM\JoinColumn(nullable: false)]
     private ?Adherent $adherent = null;
 
-    #[ORM\ManyToOne(inversedBy: 'emprunts')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\ManyToOne(inversedBy: 'emprunts'),]
+    #[ORM\JoinColumn(nullable: false,)]
+   
     private ?Livre $livre = null;
 
     public function __construct()

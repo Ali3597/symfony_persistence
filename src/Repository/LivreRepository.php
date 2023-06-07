@@ -39,6 +39,17 @@ class LivreRepository extends ServiceEntityRepository
         }
     }
 
+
+    public function findAllNotDeleted($value): ?Livre
+       {
+           return $this->createQueryBuilder('l')
+               ->andWhere('l.deleted = :delted')
+               ->setParameter('deleted', FALSE)
+               ->getQuery()
+               ->getOneOrNullResult()
+           ;
+       }
+
 //    /**
 //     * @return Livre[] Returns an array of Livre objects
 //     */

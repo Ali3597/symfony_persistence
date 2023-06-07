@@ -17,7 +17,7 @@ class LivreController extends AbstractController
     public function index(LivreRepository $livreRepository): Response
     {
         return $this->render('livre/index.html.twig', [
-            'livres' => $livreRepository->findAll(),
+            'livres' => $livreRepository->findAllNotDeleted(),
         ]);
     }
 
@@ -70,7 +70,8 @@ class LivreController extends AbstractController
     public function delete(Request $request, Livre $livre, LivreRepository $livreRepository): Response
     {
         if ($this->isCsrfTokenValid('delete'.$livre->getId(), $request->request->get('_token'))) {
-            $livreRepository->remove($livre, true);
+            $livre->setDeleted(True);
+            $livreRepository->save($livre, true);
         }
 
         return $this->redirectToRoute('app_livre_index', [], Response::HTTP_SEE_OTHER);

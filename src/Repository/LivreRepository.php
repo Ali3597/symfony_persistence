@@ -40,10 +40,10 @@ class LivreRepository extends ServiceEntityRepository
     }
 
 
-    public function findAllNotDeleted($value): ?Livre
+    public function findAllNotDeleted(): ?Livre
        {
            return $this->createQueryBuilder('l')
-               ->andWhere('l.deleted = :delted')
+               ->andWhere('l.deleted = :deleted')
                ->setParameter('deleted', FALSE)
                ->getQuery()
                ->getOneOrNullResult()

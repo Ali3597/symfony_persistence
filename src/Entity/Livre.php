@@ -35,7 +35,7 @@ class Livre
     #[ORM\OneToMany(mappedBy: 'livre', targetEntity: Emprunt::class)]
     private Collection $emprunts;
 
-    #[ORM\Column]
+ 
     #[ORM\Column(options: ["default" => FALSE])]
     private ?bool $deleted = null;
 
